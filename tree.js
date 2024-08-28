@@ -1,70 +1,121 @@
-
-
 class Person {
-    constructor(fullName, birthDate) {
-        this.fullName = fullName;     
-        this.birthDate = birthDate;   
-        this.children = [];           
+    constructor(fullName, birthdate) {
+        this.fullName = fullName;
+        this.birthdate = birthdate;
     }
 
-    addChild(child) {
-        this.children.push(child);
+    toString() {
+        return `${this.fullName} (${this.birthdate})`;
+    }
+}
+
+class Node {
+    constructor(value) {
+        this.value = value;
+        this.children = [];
+    }
+
+    isLeaf() {
+        return this.children.length === 0;
     }
 }
 
 class FamilyTree {
-    constructor(root) {
-        this.root = root; 
+    constructor() {
+        this.root = null;
     }
 
-    printPreOrder(node = this.root) {
-        if (node === null) return;
-        console.log(`Name: ${node.fullName}, Birth Date: ${node.birthDate}`);
-        node.children.forEach(child => this.printPreOrder(child));
-    }
-
-    printInOrder(node = this.root) {
-        if (node === null) return;
-        if (node.children.length > 0) {
-            this.printInOrder(node.children[0]); 
+    search(fullName, node = this.root) {
+        if (!this.root) {
+            return null;
         }
-        console.log(`Name: ${node.fullName}, Birth Date: ${node.birthDate}`);
-        for (let i = 1; i < node.children.length; i++) {
-            this.printInOrder(node.children[i]); 
+        if (this.root.value.fullName === fullName) {
+            return this.root;
+        } else {
+            const children = node.children;
+            const inChildren = children.find(item => item.value.fullName === fullName);
+            if (inChildren) {
+                return inChildren;
+            } else {
+                let hasChild;
+                children.forEach(item => {
+                    if (hasChild) {
+                        return;
+                    }
+                    hasChild = this.search(fullName, item);
+                });
+                return hasChild;
+            }
         }
     }
 
-    printPostOrder(node = this.root) {
-        if (node === null) return;
-        node.children.forEach(child => this.printPostOrder(child));
-        console.log(`Name: ${node.fullName}, Birth Date: ${node.birthDate}`);
+    insert(person, parentFullName) {
+        const newNode = new Node(person);
+        if (!parentFullName) {
+            if (!this.root) {
+                this.root = newNode;
+            } else {
+                return null;
+            }
+        } else {
+            const parentNode = this.search(parentFullName);
+            if (parentNode) {
+                parentNode.children.push(newNode);
+            } else {
+                console.log(`Parent ${parentFullName} not found.`);
+            }
+        }
+    }
+
+    preOrder(node = this.root) {
+        if (!node) {
+            return;
+        }
+        console.log(node.value.toString());
+        node.children.forEach(element => {
+            this.preOrder(element);
+        });
+    }
+
+    postOrder(node = this.root) {
+        if (!node) {
+            return;
+        }
+        node.children.forEach(element => {
+            this.postOrder(element);
+        });
+        console.log(node.value.toString());
+    }
+
+    inOrder(node = this.root) {
+        if (!node) {
+            return;
+        }
+        if (node.children.length === 0) {
+            console.log(node.value.toString());
+        } else {
+            this.inOrder(node.children[0]);
+            console.log(node.value.toString());
+            for (let i = 1; i < node.children.length; i++) {
+                this.inOrder(node.children[i]);
+            }
+        }
     }
 }
 
-const greatGrandparent = new Person('Great Grandparent', '1900-01-01');
-const grandparent = new Person('Grandparent', '1925-06-15');
-const parent = new Person('Parent', '1950-03-20');
-const child1 = new Person('Child 1', '1975-09-05');
-const child2 = new Person('Child 2', '1978-11-22');
-const grandchild1 = new Person('Grandchild 1', '2000-07-10');
-const grandchild2 = new Person('Grandchild 2', '2003-12-30');
+const familyTree = new FamilyTree();
 
-greatGrandparent.addChild(grandparent);
-grandparent.addChild(parent);
-parent.addChild(child1);
-parent.addChild(child2);
-child1.addChild(grandchild1);
-child2.addChild(grandchild2);
+familyTree.insert(new Person("Bisabuelo Paterno", "1900-01-01"));
+familyTree.insert(new Person("Abuelo Paterno", "1930-05-15"), "Bisabuelo Paterno");
+familyTree.insert(new Person("Padre", "1960-10-20"), "Abuelo Paterno");
+familyTree.insert(new Person("Yo", "1990-12-25"), "Padre");
+familyTree.insert(new Person("Hijo", "2020-06-30"), "Yo");
 
-const familyTree = new FamilyTree(greatGrandparent);
+console.log("Pre-orden:");
+familyTree.preOrder();
 
-console.log('Pre-Order Traversal:');
-familyTree.printPreOrder();
-console.log('---');
+console.log("\n Post-orden:");
+familyTree.postOrder();
 
-console.log('In-Order Traversal:');
-familyTree.printInOrder();
-console.log('---');
-
-console.log('Post-Order Traversal:');
-familyTree.printPostOrder();
+console.log("\nIn-orden:");
+familyTree.inOrder();
