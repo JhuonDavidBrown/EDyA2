@@ -35,13 +35,10 @@ class SimpleLinkedList {
     }
 }
 
-// Crear una nueva lista de TODOs
 const todoList = new SimpleLinkedList();
 
-// Añadir algunas tareas a la lista
 todoList.append("Buy groceries", "Need to buy milk, bread, and eggs", 3);
 todoList.append("Finish project", "Complete the final report for the client", 2);
 todoList.append("Workout", "Go to the gym and do a cardio session", 1);
 
-// Imprimir todas las tareas
 todoList.print();

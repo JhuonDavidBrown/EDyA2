@@ -1,62 +1,93 @@
 
 
+//Implementación con arreglos
+class Stack{
+    constructor(){
+        this.stack = [];
+    }
+
+    push(element){
+        this.stack.push(element);
+        return this.stack;
+    }
+    pop(){
+        return this.stack.pop();
+    }
+    peek(){
+        return this.stack[this.stack.length-1];
+    }
+    size(){
+        return this.stack.length;
+    }
+    print(){
+        console.log(this.stack);
+    }
+}
+
+const stack = new Stack();
+console.log(stack.push(["La metamorphosis","12132","Frank Kafka","Yaper"]));
+console.log(stack.push(["El extranjero","2212342","Albert Camus","Amp"]));
+console.log(stack.size());
+stack.print();
+console.log(stack.peek());
+console.log(stack.pop());
+
+/*
+console.log(stack.size());
+console.log(stack.push("John Cena"));
+console.log(stack.push("The Rock"));
+console.log(stack.size());
+stack.print();
+console.log(stack.peek());
+console.log(stack.pop());
+console.log(stack.peek());
+*/
+
+
+//Implementación con objetos
+
+class Stack_2{
+    constructor(){
+        this.stack={};
+        this.count = 0;
+    }
+
+    push(element){
+        this.stack[this.count] = element;
+        this.count++;
+        return this.stack;
+    }
+    pop(){
+        this.count--;
+        const element = this.stack[this.count];
+        delete this.stack[this.count];
+        return element;
+    }
+    peek(){
+        return this.stack[this.count-1];
+    }
+    size(){
+        return this.count;
+    }
+    print(){
+        console.log(this.stack);
+    }
+}
 class Book{
-    constructor(name,isbn,author,editorial){
+    constructor(name,ISBN,author,editorial){
         this.name = name;
-        this.isbn = isbn;
+        this.ISBN = ISBN;
         this.author = author;
         this.editorial = editorial;
     }
-
 }
- class Stack{
-    constructor(){
-        this.items = [];
-    }
+const stack_2 = new Stack_2();
+const book = new Book("El extranjero","21309","Albert Camus","RAA");
 
-    push(book){
-        this.items.push(book);
-    }
+console.log(stack_2.push(new Book("La metamorphosis","12132","Frank Kafka","Yaper")));
+console.log(stack_2.size());
+console.log(stack_2.push(book));
+stack_2.print();
 
-    pop(){
-        if(this.isEmpty()){
-            throw new Error("La pila está vacía");
-        }
-        return this.items.pop();
-    }
-    peek(){
-        if(this.isEmpty()){
-            throw new Error("La pila está vacía");
-        }
-        return this.items[this.items.length-1];
-    }
-    isEmpty(){
-        return this.items.length === 0;
-    }
-    printStack(){
-        if(this.isEmpty())console.log("La pila está vacía");
-        this.items.forEach((book,index)=>{
-            console.log(`Book ${index + 1}:`);
-            console.log(`Name: ${book.name}`);
-            console.log(`ISBN: ${book.isbn}`);
-            console.log(`Author: ${book.author}`);
-            console.log(`Editorial: ${book.editorial}`);
-            console.log('---');
-        });
-    }
-}
-const bookStack = new Stack();
 
-bookStack.push(new Book('To Kill a Mockingbird', '978-0-06-112008-4', 'Harper Lee', 'J.B. Lippincott & Co.'));
-bookStack.push(new Book('1984', '978-0-452-28423-4', 'George Orwell', 'Secker & Warburg'));
-bookStack.push(new Book('The Great Gatsby', '978-0-7432-7356-5', 'F. Scott Fitzgerald', 'Scribner'));
-bookStack.push(new Book('Moby-Dick', '978-1-5011-9763-1', 'Herman Melville', 'Harper & Brothers'));
 
-bookStack.printStack();
-
-console.log("Book at the top of the stack:");
-const topBook = bookStack.peek();
-console.log(`Name: ${topBook.name}`);
-console.log(`ISBN: ${topBook.isbn}`);
-console.log(`Author: ${topBook.author}`);
-console.log(`Editorial: ${topBook.editorial}`);
